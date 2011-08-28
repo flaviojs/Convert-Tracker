@@ -1,0 +1,9 @@
+This is a tracker converter.
+
+Curretly it converts from "Bug Tracker v1.3 Final": http://mods.invisionize.com/index.php/f/6995
+to "IP.Tracker 2.0.4": http://community.invisionpower.com/forum/411-iptracker/
+
+It only makes changes in the last stage, you get a LAST CHANCE warning before entering that stage.
+
+Supports converting locally and remotely.
+Doesn't support custom fields or attachments.

@@ -7,3 +7,17 @@ It only makes changes in the last stage, you get a LAST CHANCE warning before en
 
 Supports converting locally and remotely.
 Doesn't support custom fields or attachments.
+
+
+
+Usage:
+1) Replicate the structure of the old tracker in the new tracker. (add/set necessary projects and fields in the AdminCP)
+2) Copy the converter to a folder in a server with php support, preferably next to the forum folders. 
+3) Run the converter:
+3.1) Open 'converter.php' in a browser.
+3.2) Search and select the folder of the old and new forum (or enter the sql settings manually).
+3.3) Select how to convert the projects and fields.
+3.4) Copy missing author accounts from old forum (using the AdminCP?) or let them be converted to id 0.
+3.5) Choose what to do with the existing data of the target forum, if any is present.
+3.6) If ready to start converting, press 'Continue' in the LAST CHANCE screen.
+3.7) Wait for the converter to finish and press 'DONE' to go back to the beginning.

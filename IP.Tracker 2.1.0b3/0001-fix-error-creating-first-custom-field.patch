@@ -1,0 +1,25 @@
+From 4a7a4a71b37e50c09beb57c02d868ac02661474a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?"Fl=C3=A1vio=20J.=20Saraiva"?= <flaviojs2005@gmail.com>
+Date: Fri, 9 Dec 2011 14:17:24 +0000
+Subject: [PATCH] fix error creating first custom field
+
+---
+ .../tracker/modules/custom/fields_admin/custom.php |    2 +-
+ 1 files changed, 1 insertions(+), 1 deletions(-)
+
+diff --git a/upload/admin/applications_addon/ips/tracker/modules/custom/fields_admin/custom.php b/upload/admin/applications_addon/ips/tracker/modules/custom/fields_admin/custom.php
+index 2f3807b..dd9b500 100644
+--- a/upload/admin/applications_addon/ips/tracker/modules/custom/fields_admin/custom.php
++++ b/upload/admin/applications_addon/ips/tracker/modules/custom/fields_admin/custom.php
+@@ -281,7 +281,7 @@ class admin_tracker_module_custom_field_custom extends iptCommand
+ 				)
+ 			);
+ 
+-			$array['position']  = $row['field_order'] + 1;
++			$array['position']  = $row['field_order'] == NULL ? 0 : $row['field_order'] + 1;
+ 
+ 			// Insert our custom field
+ 			$this->DB->insert( 'tracker_module_custom', $array );
+-- 
+1.7.6.msysgit.0
+

@@ -2,7 +2,7 @@
 class Converter
 {
 	public $tracker_in = "Bug Tracker v1.3 Final";
-	public $tracker_out = "IP.Tracker 2.0.4";
+	public $tracker_out = "IP.Tracker (2.0.4 or 2.1.0b3)";
 
 	public function table_convert()
 	{
@@ -11,7 +11,7 @@ class Converter
 <tr><th><em>".$this->tracker_in."</em></th><td>&rarr;</td><th><em>".$this->tracker_out."</em></th></tr>
 <tr><td>Category</td><td>&rarr;</td><td>Status</td></tr>
 <tr><td>Severity</td><td>&rarr;</td><td>Severity (1,2,3,4,5)</td></tr>
-<tr><td>Custom Fields</td><td>&rarr;</td><td><span title='TODO'>???</span></td></tr>
+<tr><td>Custom Fields</td><td>&rarr;</td><td>Custom Fields</td></tr>
 <tr><td>Bug</td><td>&rarr;</td><td>Issue + Post</td></tr>
 <tr><td>Reply</td><td>&rarr;</td><td>Post</td></tr>
 </table></div>
@@ -148,6 +148,7 @@ class Converter
 
 		$str .= "<br />Processing...<br /><div class='indented'>";
 		$bugs = $this->sql_id2row('bugtracker_bugs','bug_id',$this->vars_in);
+		$fields_content = $this->sql_id2row('bugtracker_fields_content','bug_id',$this->vars_in);
 		foreach ($bugs as $bug_id => $bug)
 		{
 			if (!$this->projects[$bug['project_id']])
@@ -224,6 +225,10 @@ class Converter
 				$issue['module_severity_id'] = $this->severities[$bug['severity_id']];
 			if ($this->categories[$bug['category_id']])
 				$issue['module_status_id'] = $this->categories[$bug['category_id']];
+			$custom_fields_content = isset($fields_content[$bug_id]) ? $fields_content[$bug_id] : array();
+			foreach ($this->custom_fields as $old_id => $new_id)
+				if ($new_id && isset($custom_fields_content['field_'.$old_id]))
+					$issue['field_'.$new_id] = $custom_fields_content['field_'.$old_id];
 			$post = array(
 				//pid
 				'append_edit' => $bug['bug_edit_time'] != NULL and $bug['bug_edit_name'] != NULL ? 1 : 0,

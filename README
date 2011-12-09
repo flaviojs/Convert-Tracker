@@ -1,12 +1,12 @@
 This is a tracker converter.
 
 Curretly it converts from "Bug Tracker v1.3 Final": http://mods.invisionize.com/index.php/f/6995
-to "IP.Tracker 2.0.4": http://community.invisionpower.com/forum/411-iptracker/
+to "IP.Tracker (2.0.4 or 2.1.0b3)": http://community.invisionpower.com/forum/411-iptracker/
 
 It only makes changes in the last stage, you get a LAST CHANCE warning before entering that stage.
 
 Supports converting locally and remotely.
-Doesn't support custom fields or attachments.
+Doesn't support attachments.
 
 
 
@@ -17,7 +17,7 @@ Usage:
 3.1) Open 'converter.php' in a browser.
 3.2) Search and select the folder of the old and new forum (or enter the sql settings manually).
 3.3) Select how to convert the projects and fields.
-3.4) Copy missing author accounts from old forum (using the AdminCP?) or let them be converted to id 0.
+3.4) Copy missing author accounts from old forum (using the AdminCP?) or let them be converted to id 0 (guests).
 3.5) Choose what to do with the existing data of the target forum, if any is present.
 3.6) If ready to start converting, press 'Continue' in the LAST CHANCE screen.
 3.7) Wait for the converter to finish and press 'DONE' to go back to the beginning.

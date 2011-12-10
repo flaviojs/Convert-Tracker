@@ -1,0 +1,43 @@
+From 4152dee432218480a6a04a20405e256572463c55 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?"Fl=C3=A1vio=20J.=20Saraiva"?= <flaviojs2005@gmail.com>
+Date: Sat, 10 Dec 2011 02:18:17 +0000
+Subject: [PATCH] fix look of Manage Global Fields > Statuses in the
+ AdminCP
+
+---
+ .../modules/status/skin_cp/cp_skin_status.php      |    7 +++++--
+ 1 files changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/upload/admin/applications_addon/ips/tracker/modules/status/skin_cp/cp_skin_status.php b/upload/admin/applications_addon/ips/tracker/modules/status/skin_cp/cp_skin_status.php
+index 5a7d4ff..6af6b1b 100644
+--- a/upload/admin/applications_addon/ips/tracker/modules/status/skin_cp/cp_skin_status.php
++++ b/upload/admin/applications_addon/ips/tracker/modules/status/skin_cp/cp_skin_status.php
+@@ -110,12 +110,15 @@ $this->editor = new $classToLoad();
+ 
+ //$editor = $this->editor->show( 'Post', array( 'height' => 150, 'type' => 'mini' ) );
+ 
+-$this->registry->output->addToDocumentHead( 'importcss', "{$this->settings['css_base_url']}style_css/{$this->registry->output->skin['_csscacheid']}/ipb_ckeditor.css" );
++//$this->registry->output->addToDocumentHead( 'importcss', "{$this->settings['css_base_url']}/style_css/{$this->registry->output->skin['_csscacheid']}/ipb_ckeditor.css" );
+ 
+ $IPBHTML = "";
+ $bbcode = IPSLib::fetchBbcodeAsJson();
+ 
+ $IPBHTML .= <<<EOF
++<style type="text/css">
++@import url("{$this->settings['css_base_url']}style_css/{$this->registry->output->skin['_csscacheid']}/ipb_ckeditor.css");
++</style>
+ <script type="text/javascript" src='{$this->settings['js_app_url']}../modules/status/js/acp.status.js'></script>
+ <script type="text/javascript" src="{$this->settings['js_base_url']}js/ips.textEditor.js"></script>
+ <script type="text/javascript" src="{$this->settings['js_base_url']}js/3rd_party/ckeditor/ckeditor.js"></script>
+@@ -149,7 +152,7 @@ $IPBHTML .= <<<EOF
+ 	<ul class='context_menu'>
+ 		<li>
+ 			<a href='javascript:void(0);' class='add_status' title='Create a Status'>
+-				<img src='{$this->settings['skin_acp_url']}/_newimages/icons/add.png' alt='' />
++				<img src='{$this->settings['skin_acp_url']}/images/icons/add.png' alt='' />
+ 				Create a Status
+ 			</a>
+ 		</li>
+-- 
+1.7.6.msysgit.0
+

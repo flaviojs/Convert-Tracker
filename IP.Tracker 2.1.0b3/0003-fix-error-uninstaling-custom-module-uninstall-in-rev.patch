@@ -1,0 +1,25 @@
+From 2de4ff41ae933203d8ac5a29e61996cf2f307a8e Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?"Fl=C3=A1vio=20J.=20Saraiva"?= <flaviojs2005@gmail.com>
+Date: Sun, 11 Dec 2011 00:30:24 +0000
+Subject: [PATCH] fix error uninstaling custom module (uninstall in reverse
+ order)
+
+---
+ .../ips/tracker/modules_admin/modules/setup.php    |    1 +
+ 1 files changed, 1 insertions(+), 0 deletions(-)
+
+diff --git a/upload/admin/applications_addon/ips/tracker/modules_admin/modules/setup.php b/upload/admin/applications_addon/ips/tracker/modules_admin/modules/setup.php
+index 0574d1f..520a89d 100644
+--- a/upload/admin/applications_addon/ips/tracker/modules_admin/modules/setup.php
++++ b/upload/admin/applications_addon/ips/tracker/modules_admin/modules/setup.php
+@@ -199,6 +199,7 @@ class admin_tracker_modules_setup extends ipsCommand
+ 		if( file_exists( $_file ) )
+ 		{
+ 			require( $_file );
++			$TABLE = array_reverse( $TABLE );// uninstall in reverse order
+ 
+ 			foreach( $TABLE as $q )
+ 			{
+-- 
+1.7.6.msysgit.0
+

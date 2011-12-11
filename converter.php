@@ -19,7 +19,7 @@ class Converter
 		return $str;
 	}
 
-	public $url_in = "http://mods.invisionize.com/index.php/f/6995";
+	public $url_in = "http://invisionmodding.com/index.php?autocom=downloads&showfile=520";
 	public $url_out = "http://community.invisionpower.com/forum/411-iptracker/";
 
 	public $stage = 0;

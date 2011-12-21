@@ -1,0 +1,127 @@
+From a8eee054fcfa7dd824116f9434664be56d85890b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?"Fl=C3=A1vio=20J.=20Saraiva"?= <flaviojs2005@gmail.com>
+Date: Wed, 21 Dec 2011 07:31:43 +0000
+Subject: [PATCH] add support for module managers (optional)
+
+---
+ .../ips/tracker/modules_admin/modules/modules.php  |   68 ++++++++++++++------
+ .../ips/tracker/skin_cp/cp_skin_modules.php        |    6 +-
+ 2 files changed, 52 insertions(+), 22 deletions(-)
+
+diff --git a/upload/admin/applications_addon/ips/tracker/modules_admin/modules/modules.php b/upload/admin/applications_addon/ips/tracker/modules_admin/modules/modules.php
+index 09ce56d..010e877 100644
+--- a/upload/admin/applications_addon/ips/tracker/modules_admin/modules/modules.php
++++ b/upload/admin/applications_addon/ips/tracker/modules_admin/modules/modules.php
+@@ -80,24 +80,53 @@ class admin_tracker_modules_modules extends ipsCommand
+ 		$this->form_code    = $this->html->form_code    = 'module=modules&amp;section=modules';
+ 		$this->form_code_js = $this->html->form_code_js = 'module=modules&section=modules';
+ 
+-		//-----------------------------------------
+-		// What to do...
+-		//-----------------------------------------
++		if ( isset( $this->request['component'] ) )
++		{
++			//-----------------------------------------
++			// Load the inputs
++			//-----------------------------------------
++
++			$module = $this->request['component'];
+ 
+-		switch( $this->request['do'] )
++			//-----------------------------------------
++			// Show settings form
++			//-----------------------------------------
++
++			$className = 'admin_tracker_module_' . $module . '_manager';
++			$filePath  = $this->registry->tracker->modules()->getModuleFolder( $module ) . 'sources/manager.php';
++
++			//-----------------------------------------
++			// View settings
++			//-----------------------------------------
++
++			if ( $this->registry->tracker->modules()->moduleIsInstalled( $module, FALSE ) && file_exists( $filePath ) )
++			{
++				require_once( $filePath );
++				
++				if ( class_exists( $className ) )
++				{
++					$settingsClass = new $className();
++					$settingsClass->execute( $this->registry );
++				}
++			}
++		}
++		else
+ 		{
+-			case 'edit':
+-				$this->registry->getClass('class_permissions')->checkPermissionAutoMsg( 'tracker_fields_manage' );
+-				$this->form( 'edit' );
+-				break;
+-			case 'toggle':
+-				$this->registry->getClass('class_permissions')->checkPermissionAutoMsg( 'tracker_fields_manage' );
+-				$this->toggleEnabled();
+-				break;
+-			default:
+-				$this->request['do'] = 'overview';
+-				$this->listModules();
+-				break;
++			//-----------------------------------------
++			// What to do...
++			//-----------------------------------------
++
++			switch( $this->request['do'] )
++			{
++				case 'toggle':
++					$this->registry->getClass('class_permissions')->checkPermissionAutoMsg( 'tracker_fields_manage' );
++					$this->toggleEnabled();
++					break;
++				default:
++					$this->request['do'] = 'overview';
++					$this->listModules();
++					break;
++			}
+ 		}
+ 
+ 		//-----------------------------------------
+@@ -211,11 +240,12 @@ class admin_tracker_modules_modules extends ipsCommand
+ 		if ( $module['enabled'] )
+ 		{
+ 			$this->DB->update( 'tracker_module', array( 'enabled' => 0 ), "directory='{$module['directory']}'" );
+-			$this->registry->tracker->modules()->rebuild();
+-			$this->registry->output->silentRedirect( $this->settings['base_url'] . $this->form_code );
++		}
++		else
++		{
++			$this->DB->update( 'tracker_module', array( 'enabled' => 1 ), "directory='{$module['directory']}'" );
+ 		}
+ 		
+-		$this->DB->update( 'tracker_module', array( 'enabled' => 1 ), "directory='{$module['directory']}'" );
+ 		$this->registry->tracker->modules()->rebuild();
+ 		$this->registry->output->silentRedirect( $this->settings['base_url'] . $this->form_code );
+ 	}
+diff --git a/upload/admin/applications_addon/ips/tracker/skin_cp/cp_skin_modules.php b/upload/admin/applications_addon/ips/tracker/skin_cp/cp_skin_modules.php
+index 7dac2a2..cf68405 100644
+--- a/upload/admin/applications_addon/ips/tracker/skin_cp/cp_skin_modules.php
++++ b/upload/admin/applications_addon/ips/tracker/skin_cp/cp_skin_modules.php
+@@ -243,7 +243,7 @@ $IPBHTML .= <<<EOF
+ 					<a class="toggle_{$enabled}" href="{$this->settings['base_url']}{$this->form_code}&amp;do=toggle&amp;module_directory={$v['directory']}" title="{$text} Module">{$text} Module</a>
+ 				</li>
+ 				<li class='i_delete'>
+-					<a href="{$this->settings['base_url']}module=modules&amp;section=setup&amp;directory={$v['directory']}&do=remove" title="Uninstall Module">Uninstall Module</a>							
++					<a href="{$this->settings['base_url']}module=modules&amp;section=setup&amp;directory={$v['directory']}&amp;do=remove" title="Uninstall Module">Uninstall Module</a>
+ 				</li>
+ 			</ul>
+ 		</div>
+@@ -251,8 +251,8 @@ $IPBHTML .= <<<EOF
+ 			<img src="{$this->settings['skin_app_url']}../modules/{$v['directory']}/skin_cp/moduleIcon.png" alt=''>
+ 		</div>
+ 		<div class='item_info'>
+-			<strong>{$v['title']}</strong>				
+-			<div class='desc' style='margin-right: 150px;'>by <strong>{$v['author']}</strong><br />Versions: {$v['version']}</div>
++			<a href="{$this->settings['base_url']}module=modules&amp;section=modules&amp;component={$v['directory']}&amp;do=overview" title="Manage {$v['title']} Module"><strong>{$v['title']}</strong></a>
++			<div class='desc' style='margin-right: 150px;'>by <strong>{$v['author']}</strong><br />Version: {$v['version']}</div>
+ 		</div>
+ 	</div>
+ 	
+-- 
+1.7.6.msysgit.0
+
